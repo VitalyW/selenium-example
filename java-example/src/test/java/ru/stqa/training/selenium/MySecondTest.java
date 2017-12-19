@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
-public class MyFirstTest extends TestBase {
+public class MySecondTest extends TestBase {
 
   @Test
   public void myFirstTest() {
