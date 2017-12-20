@@ -1,17 +1,14 @@
+package ru.stqa.training.selenium.appmanager;
 
-package ru.stqa.training.selenium;
-
-import org.junit.After;
-import org.junit.Before;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 
-public class TestBase {
-
+public class ApplicationManager {
   public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
   public WebDriver driver;
   public WebDriverWait wait;
@@ -30,8 +27,7 @@ public class TestBase {
     return driver.findElements(locator).size() > 0;
   }
 
-  @Before
-  public void start() {
+  public void init() {
     if (tlDriver.get() != null) {
       driver = tlDriver.get();
       wait = new WebDriverWait(driver, 10);
@@ -46,7 +42,6 @@ public class TestBase {
             new Thread(() -> { driver.quit(); driver = null; }));
   }
 
-  @After
   public void stop() {
     //driver.quit();
     //driver = null;
