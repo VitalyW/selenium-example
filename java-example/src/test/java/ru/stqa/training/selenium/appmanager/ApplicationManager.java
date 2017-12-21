@@ -77,7 +77,35 @@ public class ApplicationManager {
       } else {
         driver.findElement(By.tagName("h1"));
       }
-
     }
   }
+
+  public void navigateToLitecartStore() {
+    driver.get("http://localhost/litecart/en/");
+  }
+
+  public int iterateOverCampaignProducts() {
+    List<WebElement> campaignStickers = driver.findElements(By.cssSelector("#box-campaign-products a.link .sticker"));
+    return campaignStickers.size();
+  }
+
+  public int iterateOverPopularProducts() {
+    List<WebElement> popularStickers = driver.findElements(By.cssSelector("#box-popular-products a.link .sticker"));
+    return popularStickers.size();
+  }
+
+  public int iterateOverLatestProducts() {
+    List<WebElement> latestStickers = driver.findElements(By.cssSelector("#box-latest-products a.link .sticker"));
+    return latestStickers.size();
+  }
+
+  public int quantityOfProductsOnMainPage() {
+    List<WebElement> quantityOfProductOnMainPage = driver.findElements(By.cssSelector(".box .product .link"));
+    return quantityOfProductOnMainPage.size();
+  }
+
+  public int quantityOfAllStickersOnMainPage() {
+    return iterateOverCampaignProducts() + iterateOverPopularProducts() + iterateOverLatestProducts();
+  }
+
 }
