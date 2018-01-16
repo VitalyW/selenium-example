@@ -63,7 +63,6 @@ public class ApplicationManager {
     driver.findElement(By.cssSelector("[type=submit]")).click();
   }
 
-
   public void iterateOverLeftMenuAndSubmenu(By locator) {
     List<WebElement> tableOnTheLeft = driver.findElements(locator);
     for (int i = 0; i < tableOnTheLeft.size(); i++) {
@@ -78,6 +77,18 @@ public class ApplicationManager {
         driver.findElement(By.tagName("h1"));
       }
     }
+  }
+
+  public void navigateToCountries() {
+    navigateToLitecart();
+    login("admin", "admin");
+    driver.findElement(By.xpath("//*[contains(@class, 'name') and contains(text(), 'Countries')]")).click();
+  }
+
+  public void navigateToGeoZones() {
+    navigateToLitecart();
+    login("admin", "admin");
+    driver.findElement(By.xpath("//*[contains(@class, 'name') and contains(text(), 'Geo Zones')]")).click();
   }
 
   public void navigateToLitecartStore() {
