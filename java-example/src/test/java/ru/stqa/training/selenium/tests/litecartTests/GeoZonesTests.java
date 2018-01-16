@@ -35,20 +35,10 @@ public class GeoZonesTests extends TestBase {
     for (WebElement row : rows) {
       List<WebElement> cells = row.findElements(By.tagName("td"));
       if (cells.get(5).getText().equals("0")) {
-
         countries.add(cells.get(4).findElement(By.tagName("a")).getAttribute("href"));
       }
     }
-    for (String country : countries) {
-      app.driver.get(country);
-      List<WebElement> geoZones = app.driver.findElements(By.cssSelector(".table td:nth-child(3)"));
-      List<String> geoZonesNames = geoZones.stream().map(WebElement::getText).collect(Collectors.toList());
-      List<String> sortedGeoZones = new ArrayList<>(geoZonesNames);
-      Collections.sort(sortedGeoZones);
-      for (int j = 0; j < sortedGeoZones.size(); j++) {
-        Assert.assertEquals(sortedGeoZones.get(j), geoZonesNames.get(j));
-      }
-    }
+    comparison(countries, ".table td:nth-child(3)");
   }
 
   @Test
@@ -62,9 +52,13 @@ public class GeoZonesTests extends TestBase {
       WebElement name = cells.get(2);
       countriesList.add(name.findElement(By.tagName("a")).getAttribute("href"));
     }
+    comparison(countriesList, "tr td:nth-child(3)");
+  }
+
+  private void comparison(List<String> countriesList, String locator) {
     for (String country : countriesList) {
       app.driver.get(country);
-      List<WebElement> geoZones = app.driver.findElements(By.cssSelector("tr td:nth-child(3)"));
+      List<WebElement> geoZones = app.driver.findElements(By.cssSelector(locator));
       List<String> geoZonesNames = geoZones.stream().map(WebElement::getText).collect(Collectors.toList());
       List<String> sortedGeoZones = new ArrayList<>(geoZonesNames);
       Collections.sort(sortedGeoZones);
