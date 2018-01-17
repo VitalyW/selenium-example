@@ -8,7 +8,7 @@ public class TestLeftMenu extends TestBase {
 
   @Test
   public void testLeftMenuAndSubmenu() {
-    app.navigateToLitecart();
+    app.navigateToLitecartAdmin();
     app.login("admin", "admin");
     app.iterateOverLeftMenuAndSubmenu(By.cssSelector("#box-apps-menu #app-"));
   }
