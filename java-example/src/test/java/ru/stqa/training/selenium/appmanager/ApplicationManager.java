@@ -14,6 +14,7 @@ import ru.stqa.training.selenium.model.RegisrationData;
 import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
@@ -207,6 +208,70 @@ public class ApplicationManager {
     type(By.cssSelector("input[name='email']"), emailAddress);
     type(By.cssSelector("input[name='password']"), password);
     click(By.cssSelector("button[name='login']"));
+  }
+
+  public void selectProduct1() {
+    WebElement product = driver.findElement(By.cssSelector(".product"));
+      product.click();
+      if (isElementPresent(By.cssSelector("[name='options[Size]']"))) {
+        WebElement select = driver.findElement(By.cssSelector("[name='options[Size]']"));
+        Select dropDown = new Select(select);
+        dropDown.selectByIndex(randomNumber());
+      }
+      addToCart();
+      closeProductView();
+      isElementPresen(By.cssSelector("#popular-products"));
+      product = driver.findElement(By.cssSelector(".product"));
+  }
+
+  public void clickOnFirstProduct() {
+    click(By.cssSelector("[class='image-wrapper']"));
+  }
+
+  public int randomNumber() {
+    Random random = new Random();
+    return random.nextInt(3) + 1;
+  }
+
+  public void closeProductView() {
+    click(By.cssSelector("[aria-label='Close']"));
+  }
+
+  public void addToCart() {
+    click(By.cssSelector("[name='add_cart_product']"));
+  }
+
+  public void checkOut() {
+    click(By.cssSelector("#cart a"));
+  }
+
+  public int getQuantity() {
+    String quantity = driver.findElement(By.cssSelector("#cart span.quantity")).getText();
+    return Integer.parseInt(quantity);
+  }
+
+  public void waitForElement(By locator) {
+      WebDriverWait wait = new WebDriverWait(driver, 5);
+      WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+  }
+
+  public void removeProductFromCart() {
+    click(By.cssSelector("[title='Remove']"));
+    waitForElement(By.cssSelector("#box-checkout-payment"));
+  }
+
+  public int getProductCountInCart() {
+    List<WebElement> products = driver.findElements(By.cssSelector("[title='Remove']"));
+    return products.size();
+  }
+
+  public boolean isElementPresen(By locator) {
+    try {
+      driver.findElement(locator);
+      return true;
+    } catch (NoSuchElementException ex) {
+      return false;
+    }
   }
 
   public void click(By locator) {
