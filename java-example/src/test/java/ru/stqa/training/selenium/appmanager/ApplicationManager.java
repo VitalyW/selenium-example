@@ -1,10 +1,12 @@
 package ru.stqa.training.selenium.appmanager;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,6 +17,7 @@ import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
@@ -226,6 +229,44 @@ public class ApplicationManager {
 
   public void clickOnFirstProduct() {
     click(By.cssSelector("[class='image-wrapper']"));
+  }
+
+  public void selectRandomCountry() {
+    Random random = new Random();
+    int rand = random.nextInt(243) + 1;
+    List<WebElement> listOfCountries = driver.findElements(By.cssSelector
+            ("table[class='table table-striped data-table'] a[title='Edit']"));
+    listOfCountries.get(rand).click();
+  }
+
+  public List<WebElement> getAllExternalLinks() {
+    List<WebElement> externalLinks = driver.findElements(By.cssSelector("[name='country_form'] a[target='_blank']"));
+    return externalLinks;
+  }
+
+  public void openExternalLinks() {
+    List<WebElement> externalLinks = driver.findElements(By.cssSelector("[name='country_form'] a[target='_blank']"));
+    for (WebElement link : externalLinks) {
+      String oldWindow = driver.getWindowHandle();
+      Set<String> oldWindows = driver.getWindowHandles();
+      link.click();
+      String newWindow = wait.until(waitForNewWindow(oldWindows));
+      driver.switchTo().window(newWindow);
+      driver.close();
+      driver.switchTo().window(oldWindow);
+    }
+  }
+
+  public ExpectedCondition<String> waitForNewWindow(Set<String> oldWindows) {
+    return driver -> {
+      Set<String> windows = driver.getWindowHandles();
+      windows.removeAll(oldWindows);
+      if (windows.size() > 0) {
+        return windows.iterator().next();
+      } else {
+        return null;
+      }
+    };
   }
 
   public int randomNumber() {
